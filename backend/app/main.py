@@ -41,8 +41,21 @@ app.include_router(api_router, prefix=settings.API_V1_PREFIX)
 # 6. Serve static frontend SPA if directory exists
 from pathlib import Path
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 static_dir = Path(__file__).resolve().parent.parent / "static"
 if static_dir.exists() and (static_dir / "index.html").exists():
-    app.mount("/", StaticFiles(directory=str(static_dir), html=True), name="static")
+    assets_dir = static_dir / "assets"
+    if assets_dir.exists():
+        app.mount("/assets", StaticFiles(directory=str(assets_dir)), name="assets")
+
+    @app.get("/{full_path:path}")
+    async def serve_spa(full_path: str):
+        # Serve exact file if it exists (e.g. favicon.svg, icons.svg)
+        if full_path:
+            file_path = static_dir / full_path
+            if file_path.is_file():
+                return FileResponse(file_path)
+        # Fallback to SPA index.html for all client-side routes
+        return FileResponse(static_dir / "index.html")
 

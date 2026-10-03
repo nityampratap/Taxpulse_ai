@@ -51,6 +51,8 @@ export function DataTable<T>({
     )
   }
 
+  const safeData = Array.isArray(data) ? data : []
+
   return (
     <div className={cn('w-full overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm', className)}>
       <div className="overflow-x-auto">
@@ -84,7 +86,7 @@ export function DataTable<T>({
                   ))}
                 </tr>
               ))
-            ) : data.length === 0 ? (
+            ) : safeData.length === 0 ? (
               <tr>
                 <td colSpan={columns.length} className="p-0">
                   <div className="py-12 border-0">
@@ -97,7 +99,7 @@ export function DataTable<T>({
                 </td>
               </tr>
             ) : (
-              data.map((item, idx) => (
+              safeData.map((item, idx) => (
                 <tr
                   key={rowKey(item, idx)}
                   onClick={() => onRowClick && onRowClick(item)}
