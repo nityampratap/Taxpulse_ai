@@ -1,0 +1,10 @@
+{
+  "messaging_product": "whatsapp",
+  "recipient_type": "individual",
+  "to": "+919876543210",
+  "type": "text",
+  "text": {
+    "preview_url": false,
+    "body": "🚨 TAXPULSE ALERT: High-risk discrepancy on case TX-10482.\nPriority: HIGH | Risk Score: 62.00\nFinancial Exposure: 100,000.00 | Tax Impact: 450.00\nReply EXPLAIN TX-10482 or REVIEW TX-10482."
+  }
+}

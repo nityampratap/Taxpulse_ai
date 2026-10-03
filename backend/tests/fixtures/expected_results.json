@@ -1,0 +1,100 @@
+{
+  "metadata": {
+    "seed": 42,
+    "anchor_date": "2026-03-15",
+    "total_invoices": 105,
+    "base_invoices": 100,
+    "counts": {
+      "clean": 56,
+      "many_to_one": 2,
+      "one_to_many": 2,
+      "id_variation": 8,
+      "amount_mismatch": 6,
+      "within_tolerance": 4,
+      "date_mismatch": 5,
+      "tax_discrepancy": 6,
+      "missing_payment": 5,
+      "vendor_spike": 3,
+      "unusual_large": 3,
+      "duplicate": 5
+    },
+    "pinned_case": {
+      "transaction_id": "TX-10482",
+      "invoice_number": "INV-2048",
+      "vendor": "ABC Supplies",
+      "taxable": 97500.0,
+      "statutory_rate": 0.18,
+      "expected_tax": 17550.0,
+      "recorded_tax": 18000.0,
+      "variance": 450.0,
+      "invoice_total": 100000.0,
+      "payment_amount": 100000.0
+    }
+  },
+  "summary": {
+    "invoices_count": 105,
+    "transactions_count": 96,
+    "payments_count": 96,
+    "ledger_entries_count": 100
+  },
+  "expected_detection": {
+    "clean": {
+      "expected_status": "MATCHED",
+      "count": 56
+    },
+    "many_to_one": {
+      "expected_status": "PARTIAL_MATCH",
+      "match_method": "MANY_TO_ONE",
+      "count": 2
+    },
+    "one_to_many": {
+      "expected_status": "PARTIAL_MATCH",
+      "match_method": "ONE_TO_MANY",
+      "count": 2
+    },
+    "id_variation": {
+      "expected_status": "MATCHED",
+      "count": 8
+    },
+    "amount_mismatch": {
+      "expected_status": "MISMATCH",
+      "reason_code": "AMOUNT_MISMATCH",
+      "count": 6
+    },
+    "within_tolerance": {
+      "expected_status": "MATCHED_WITH_TOLERANCE",
+      "reason_code": "AMOUNT_WITHIN_TOLERANCE",
+      "count": 4
+    },
+    "date_mismatch": {
+      "expected_status": "MISMATCH",
+      "reason_code": "DATE_OUT_OF_RANGE",
+      "count": 5
+    },
+    "tax_discrepancy": {
+      "expected_status": "TAX_VARIANCE",
+      "reason_code": "TAX_DISCREPANCY",
+      "count": 6
+    },
+    "missing_payment": {
+      "expected_status": "MISSING",
+      "reason_code": "MISSING_PAYMENT",
+      "count": 5
+    },
+    "vendor_spike": {
+      "expected_status": "MATCHED",
+      "anomaly_expected": true,
+      "count": 3
+    },
+    "unusual_large": {
+      "expected_status": "MATCHED",
+      "anomaly_expected": true,
+      "count": 3
+    },
+    "duplicate": {
+      "expected_status": "DUPLICATE",
+      "reason_code": "DUPLICATE_INVOICE",
+      "count": 5
+    }
+  }
+}

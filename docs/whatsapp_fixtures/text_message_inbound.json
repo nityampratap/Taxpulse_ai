@@ -1,0 +1,39 @@
+{
+  "object": "whatsapp_business_account",
+  "entry": [
+    {
+      "id": "100234567890123",
+      "changes": [
+        {
+          "value": {
+            "messaging_product": "whatsapp",
+            "metadata": {
+              "display_phone_number": "+15550234567",
+              "phone_number_id": "109876543210987"
+            },
+            "contacts": [
+              {
+                "profile": {
+                  "name": "Jane Reviewer"
+                },
+                "wa_id": "919876543210"
+              }
+            ],
+            "messages": [
+              {
+                "from": "919876543210",
+                "id": "wamid.HBgMOTE5ODc2NTQzMjEwFQIAEhgWM0VCMDAwMDAwMDAwMDAwMDAwMDAAA",
+                "timestamp": "1772605200",
+                "text": {
+                  "body": "EXPLAIN TX-10482"
+                },
+                "type": "text"
+              }
+            ]
+          },
+          "field": "messages"
+        }
+      ]
+    }
+  ]
+}

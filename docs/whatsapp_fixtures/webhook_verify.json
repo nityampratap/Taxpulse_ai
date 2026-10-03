@@ -1,0 +1,5 @@
+{
+  "hub.mode": "subscribe",
+  "hub.challenge": "1158201444",
+  "hub.verify_token": "taxpulse_webhook_secret_verify_token_2026"
+}

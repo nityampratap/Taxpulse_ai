@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: taxpulse-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: taxpulse
+      POSTGRES_PASSWORD: taxpulse_secret_password
+      POSTGRES_DB: taxpulse_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U taxpulse -d taxpulse_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: taxpulse-app
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      APP_ENV: production
+      DATABASE_URL: postgresql+psycopg://taxpulse:taxpulse_secret_password@db:5432/taxpulse_db
+      JWT_SECRET: dev_secret_key_change_in_production_min_32_chars!
+      FRONTEND_ORIGIN: http://localhost:8000
+      AI_PROVIDER_ORDER: groq,gemini,mock
+      WHATSAPP_MODE: DEMO
+      STORAGE_PROVIDER: local
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
