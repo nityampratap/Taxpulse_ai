@@ -1,30 +1,53 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { DataTable, type Column, MoneyText, EmptyState } from '../components/shared'
-import { UploadCloud, Search } from 'lucide-react'
+import { apiClient } from '../services/apiClient'
 
 interface TransactionItem {
   id: string
-  referenceId: string
-  date: string
-  counterparty: string
-  amount: number
+  reference_id: string
   source: string
+  transaction_date: string
+  amount: string
+  currency: string
+  description?: string
+  counterparty_name?: string
 }
 
 export const TransactionsPage: React.FC = () => {
-  const [transactions] = useState<TransactionItem[]>([])
-  const [isLoading] = useState(false)
+  const { data, isLoading, error } = useQuery<{ transactions: TransactionItem[]; total: number }>({
+    queryKey: ['transactions'],
+    queryFn: () => apiClient.get<{ transactions: TransactionItem[]; total: number }>('/transactions'),
+  })
+
+  const transactions = data?.transactions || []
 
   const columns: Column<TransactionItem>[] = [
-    { key: 'referenceId', header: 'Reference' },
-    { key: 'date', header: 'Date' },
-    { key: 'counterparty', header: 'Counterparty' },
-    { key: 'source', header: 'Source' },
+    {
+      key: 'reference_id',
+      header: 'Reference',
+      render: (item) => <span className="font-mono text-xs font-semibold text-slate-800">{item.reference_id}</span>,
+    },
+    { key: 'transaction_date', header: 'Date' },
+    {
+      key: 'counterparty_name',
+      header: 'Counterparty',
+      render: (item) => item.counterparty_name || item.description || '—',
+    },
+    {
+      key: 'source',
+      header: 'Source',
+      render: (item) => (
+        <span className="font-mono text-[11px] px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
+          {item.source}
+        </span>
+      ),
+    },
     {
       key: 'amount',
       header: 'Amount',
       align: 'right',
-      render: (item) => <MoneyText amount={item.amount} />,
+      render: (item) => <MoneyText amount={parseFloat(item.amount)} />,
     },
   ]
 
@@ -38,35 +61,16 @@ export const TransactionsPage: React.FC = () => {
           </p>
         </div>
 
-        <button
-          type="button"
-          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 shadow-sm transition-colors"
-        >
-          <UploadCloud className="w-3.5 h-3.5" />
-          Import File (CSV/XLSX)
-        </button>
-      </div>
-
-      <div className="flex items-center gap-2 max-w-md">
-        <div className="relative flex-1">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
-          <input
-            type="text"
-            placeholder="Search reference, vendor, or invoice ID..."
-            className="w-full pl-9 pr-3 py-1.5 text-sm bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          />
+        <div className="text-xs font-mono text-slate-500 bg-slate-100 px-3 py-1.5 rounded border border-slate-200">
+          Total Ingested: {data?.total ?? transactions.length}
         </div>
       </div>
 
       <div className="space-y-3">
-        {transactions.length === 0 && !isLoading ? (
+        {transactions.length === 0 && !isLoading && !error ? (
           <EmptyState
             title="No Ingested Transactions"
-            description="No transactions or invoices have been imported into this organization workspace."
-            action={{
-              label: 'Upload Batch',
-              onClick: () => {},
-            }}
+            description="No transactions or invoices have been imported. Generate demo data on the Dashboard to load 100+ transactions."
           />
         ) : (
           <DataTable
@@ -80,3 +84,6 @@ export const TransactionsPage: React.FC = () => {
     </div>
   )
 }
+
+export default TransactionsPage
+

@@ -546,10 +546,11 @@ def seed_demo_data_to_db(db: Session) -> dict:
     db.flush()
 
     # 2. Delete previous demo data for idempotency in child-to-parent order
-    from app.models.models import Anomaly
+    from app.models.models import Anomaly, ReconciliationRun
     db.query(Case).filter_by(organization_id=org.id).delete()
     db.query(Anomaly).filter_by(organization_id=org.id).delete()
     db.query(ReconciliationResult).filter_by(organization_id=org.id).delete()
+    db.query(ReconciliationRun).filter_by(organization_id=org.id).delete()
     db.query(Payment).filter_by(organization_id=org.id).delete()
     db.query(Invoice).filter_by(organization_id=org.id).delete()
     db.query(Transaction).filter_by(organization_id=org.id).delete()

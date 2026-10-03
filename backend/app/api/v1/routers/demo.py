@@ -13,6 +13,7 @@ from app.models import (
     ImportBatch,
     Case,
     ReconciliationResult,
+    ReconciliationRun,
 )
 
 router = APIRouter(prefix="/demo", tags=["demo"])
@@ -40,6 +41,7 @@ def reset_demo_data(db: Session = Depends(get_db)):
     if org:
         db.query(Case).filter_by(organization_id=org.id).delete()
         db.query(ReconciliationResult).filter_by(organization_id=org.id).delete()
+        db.query(ReconciliationRun).filter_by(organization_id=org.id).delete()
         db.query(Payment).filter_by(organization_id=org.id).delete()
         db.query(Invoice).filter_by(organization_id=org.id).delete()
         db.query(Transaction).filter_by(organization_id=org.id).delete()

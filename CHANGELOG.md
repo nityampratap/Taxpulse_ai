@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Fully wired `ExceptionDetailPage` with live case details, statutory calculation evidence, 6-factor risk matrix, AI Copilot root cause analysis, reviewer status transitions (`IN_REVIEW`, `RESOLVED`), and WhatsApp alert dispatch.
+- Fully wired `WhatsAppPage` with live conversations stream and interactive inbound simulator supporting `EXPLAIN`, `REVIEW`, and guarded `CONFIRM` verification state machine.
+- Fully wired `AuditPage` with live immutable append-only event stream, SHA-256 checksum rendering, and actor identification.
+- Fully wired `ReconciliationPage` with live execution run history and trigger run pipeline action.
+- Fully wired `TransactionsPage`, `VendorsPage`, and `TaxIntelligencePage` to live backend data endpoints.
+
+### Fixed
+- Fixed React minified error #31 on `ExceptionsPage` by safely handling nested vendor object shapes from the API.
+- Fixed SPA fallback routing in `backend/app/main.py` to allow `/api/*` routes to correctly return 404 instead of serving `index.html`.
+- Fixed `ReconciliationRun` foreign key purge on demo reset in `backend/app/api/v1/routers/demo.py` and `scripts/generate_demo_data.py`.
+- Fixed dashboard empty state to be data-aware (3 states: no data -> generate, data loaded -> run reconciliation, reconciled with 0 cases -> no discrepancies).
 - Created foundational product specification (`docs/PRODUCT_SPEC.md`) defining the 8-stage pipeline, hybrid intelligence architecture, and 6-factor risk scoring model.
 - Created system architecture document (`docs/ARCHITECTURE.md`) detailing frontend, backend, database dialects, and security guardrails.
 - Defined complete multi-tenant relational schema (`docs/DATA_MODEL.md`) covering all 18 tables with strict `NUMERIC(18, 4)` precision.

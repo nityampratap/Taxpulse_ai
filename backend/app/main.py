@@ -51,6 +51,13 @@ if static_dir.exists() and (static_dir / "index.html").exists():
 
     @app.get("/{full_path:path}")
     async def serve_spa(full_path: str):
+        # Never intercept API routes — let them 404 naturally
+        if full_path.startswith("api/"):
+            from fastapi.responses import JSONResponse
+            return JSONResponse(
+                status_code=404,
+                content={"error": {"code": "NOT_FOUND", "message": f"/{full_path} not found", "details": None}},
+            )
         # Serve exact file if it exists (e.g. favicon.svg, icons.svg)
         if full_path:
             file_path = static_dir / full_path

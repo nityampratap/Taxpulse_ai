@@ -8,7 +8,7 @@ import { Filter } from 'lucide-react'
 interface CaseItem {
   id: string
   case_number: string
-  vendor?: string
+  vendor?: { id: string; name: string; risk_tier: string } | string
   tax_impact: string
   financial_exposure: string
   risk_score: string
@@ -38,7 +38,10 @@ export const ExceptionsPage: React.FC = () => {
         </span>
       ),
     },
-    { key: 'vendor', header: 'Vendor', render: (item) => item.vendor || '—' },
+    { key: 'vendor', header: 'Vendor', render: (item) => {
+      const v = item.vendor
+      return typeof v === 'object' && v !== null ? v.name : (v || '—')
+    }},
     {
       key: 'tax_impact',
       header: 'Tax Impact',

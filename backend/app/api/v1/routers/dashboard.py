@@ -17,11 +17,13 @@ router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 def get_metrics(db: Session = Depends(get_db)):
     org = db.query(Organization).first()
     if not org:
-        return {"total_transactions": 0, "matched": 0, "unmatched": 0,
+        return {"invoices_count": 0, "runs_count": 0, "total_transactions": 0, "matched": 0, "unmatched": 0,
                 "duplicates": 0, "missing": 0, "tax_variance": "0.00",
                 "potential_exposure": "0.00", "critical": 0, "high_risk": 0, "anomalies": 0}
 
     oid = org.id
+    invoices_count = db.query(Invoice).filter_by(organization_id=oid).count()
+    runs_count = db.query(ReconciliationRun).filter_by(organization_id=oid).count()
     total = db.query(ReconciliationResult).filter_by(organization_id=oid).count()
     matched = db.query(ReconciliationResult).filter_by(organization_id=oid).filter(
         ReconciliationResult.status.in_(["MATCHED", "MATCHED_WITH_TOLERANCE"])).count()
@@ -38,6 +40,7 @@ def get_metrics(db: Session = Depends(get_db)):
     anomalies = db.query(Anomaly).filter_by(organization_id=oid).count()
 
     return {
+        "invoices_count": invoices_count, "runs_count": runs_count,
         "total_transactions": total, "matched": matched, "unmatched": unmatched,
         "duplicates": duplicates, "missing": missing,
         "tax_variance": str(variance_sum), "potential_exposure": str(exposure_sum),
